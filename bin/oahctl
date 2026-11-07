@@ -1,5 +1,9 @@
 #!/system/bin/sh
 MODDIR="$(cd "$(dirname "$0")/.." 2>/dev/null && pwd)"
+# This diagnostic must precede the normal command's runtime-file setup.
+if [ "$1" = preflight ]; then
+  exec sh "$MODDIR/bin/violin-preflight.sh"
+fi
 RUNDIR=/data/local/tmp/oplusautohr_v2
 LOG="$RUNDIR/engine.log"
 SETTINGS="$MODDIR/config/settings.conf"
@@ -44,6 +48,8 @@ internal_max_enabled() {
   v="$(setting internal_max_enabled)"
   if [ "$v" = "1" ]; then return 0; fi
   if [ "$v" = "0" ]; then return 1; fi
+  [ "$(getprop ro.product.device)" = violin ] && return 1
+  [ "$(getprop ro.product.vendor.device)" = violin ] && return 1
   is_xiaomi_device
 }
 

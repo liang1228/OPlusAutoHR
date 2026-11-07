@@ -1,5 +1,11 @@
 #!/system/bin/sh
 MODDIR="$(cd "$(dirname "$0")/.." 2>/dev/null && pwd)"
+# The violin adaptation has only been checked against one stock firmware.
+# Refuse injection on a different build or in Recovery, before runtime writes.
+if [ "$(getprop ro.product.device)" = violin ] || \
+   [ "$(getprop ro.product.vendor.device)" = violin ]; then
+    sh "$MODDIR/bin/violin-preflight.sh" || exit 2
+fi
 RUNDIR=/data/local/tmp/oplusautohr_v2
 PRIVATE_RUNTIME=/data/local/tmp/oplusautohr_beta
 AGENT="$MODDIR/agent/oah_v2_agent.js"

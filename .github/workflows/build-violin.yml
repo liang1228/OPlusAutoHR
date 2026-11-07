@@ -1,0 +1,34 @@
+name: Build violin experimental module
+
+on:
+  push:
+    branches: [violin-os3.0.305]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check JavaScript syntax
+        run: |
+          node --check agent/oah_v2_agent.js
+          node --check webroot/app.js
+          node --check webroot/ksu.js
+      - name: Test guards and package pinned runtime
+        run: python3 ci/build_violin.py
+      - name: Upload module and verification reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: OPlusAutoHR-violin-${{ github.sha }}
+          path: |
+            dist/*.zip
+            dist/*.json
+            dist/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 30

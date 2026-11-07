@@ -8,6 +8,7 @@ set_perm "$MODPATH/service.sh" 0 0 0755
 set_perm "$MODPATH/post-fs-data.sh" 0 0 0755
 set_perm "$MODPATH/bin/oahctl" 0 0 0755
 set_perm "$MODPATH/bin/engine_supervisor.sh" 0 0 0755
+set_perm "$MODPATH/bin/violin-preflight.sh" 0 0 0755
 set_perm "$MODPATH/agent/oah_v2_agent.js" 0 0 0644
 set_perm_recursive "$MODPATH/webroot" 0 0 0755 0644
 
